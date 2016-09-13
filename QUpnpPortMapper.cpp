@@ -319,6 +319,9 @@ void QUpnpPortMapper::onUdpSocketReadyRead()
 		QNetworkReply * reply = m_networkAccessManager->get(QNetworkRequest(QUrl(location)));
 		reply->setProperty("reply-type", "discover");
 
+		m_udpSocket->deleteLater();
+		m_udpSocket = NULL;
+
 		break;
 	}
 }
@@ -326,7 +329,7 @@ void QUpnpPortMapper::onUdpSocketReadyRead()
 void QUpnpPortMapper::onReplyFinished(QNetworkReply * reply)
 {
 	reply->deleteLater();
-	const QByteArray type = reply->property("reply-type").toByteArray();;
+	const QByteArray type = reply->property("reply-type").toByteArray();
 	
 	if (type == "discover")
 		onReplyDiscover(reply);
